@@ -5,7 +5,7 @@ using namespace std;
 class Planner{
     public:
         //Constructor
-		Planner(node* head = NULL);
+		Planner(node* h = NULL, node * t = NULL, int n = 0);
 
         //Deconstructor
         //TODO
@@ -58,6 +58,8 @@ class Planner{
         
     private:
 		node* head;
+        node* tail;
+        int numnodes;
 };
 //TODO What needs to be const??
 //OFSTREAM??
