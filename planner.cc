@@ -24,6 +24,7 @@ void Planner::add(Assignment a){
         numnodes++;
     } else if(a.get_due() < (head -> data()).get_due()){ //if the first is greater than the new one, add to begining
         head = new node(a, head);
+        numnodes++;
     }else {
         node* cursor = head;
         node* prev;
@@ -37,6 +38,7 @@ void Planner::add(Assignment a){
             numnodes++;
         } else { // add here at ordered spot
             prev -> set_link(new node(a, cursor));
+            numnodes++;
         }
     }
 }
@@ -53,6 +55,24 @@ void Planner::display(ostream& outs){
 //3. Remove an assignment that has been completed. This will use the find and remove 
 //functions, both of which will take a string which is the name of the assignment.
 void Planner::remove(string target){
+    if(head == NULL){ //return if empty string
+        return;
+    }
+    node* cursor = head;
+    node* prev;
+    if((head -> data()).get_name() == target){ //if the target is at the start
+        head = head -> link();
+        delete cursor;
+    } else { // if not at the start
+        while(cursor != NULL && (cursor -> data()).get_name() != target){
+            prev = cursor;
+            cursor = cursor -> link();
+        }
+        if(cursor != NULL){
+            prev -> set_link(cursor -> link());
+            delete cursor;
+        }
+    }
     //TODO
 }
 
@@ -96,24 +116,47 @@ void Planner::find_all(DateTime due_date){
 void Planner::load(istream& ins){
     string tmpStr;
     while(!ins.eof()){
-        // Assignment name
-        //Course name
-        //Assigned Date
-        //Assigned time
-        //Due Date
-        //Due Time
-
+        Assignment tmp;
+        ins >> tmp;
+        while(ins.peek() == '\n' || ins.peek() == '\r') ins.ignore();
+        add(tmp);
     }
-    //TODO
 }
 
 //Save Assignments to file
 void Planner::save(ostream& outs){
-    //TODO
+    node* cur = head;
+    while(cur != NULL){
+        outs << cur -> data() << endl;
+        cur = cur -> link();
+    }
 }
 
 //Find Homework Assignment
 Assignment Planner::find(string target){
     //TODO
-    return Assignment();
+    if(head == NULL){
+        return Assignment();
+    }
+    node* cursor = head;
+    while(cursor != NULL && (cursor -> data()).get_name() != target){
+        cursor = cursor -> link();
+    }
+    if(cursor != NULL){
+        return cursor -> data();
+    } else {
+        return Assignment();
+    }
 }
+
+/*
+void Playlist::load(std::istream& ins){
+    while(!ins.eof()){
+        if(used == capacity){
+            resize();
+        }
+        ins >> data[used];
+        used++;
+    }
+}
+*/

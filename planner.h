@@ -7,6 +7,8 @@ class Planner{
         //Constructor
 		Planner(node* h = NULL, node * t = NULL, int n = 0);
 
+        int get_numnodes()const {return numnodes;}
+
         //Deconstructor
         //TODO
 
