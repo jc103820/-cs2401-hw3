@@ -38,7 +38,6 @@ Planner::Planner(const Planner& other){
     }
 }
 
-
 //Overloaded Assignment Operator
 Planner& Planner::operator =(const Planner& other){
     if(this == &other){
@@ -129,12 +128,23 @@ void Planner::remove(string target){
             delete cursor;
         }
     }
-    //TODO
 }
 
 //4. Learn the number of assignments that are waiting to be completed.
 int Planner::waiting(){
-    return 0;
+    int numwait = 0;
+
+    DateTime curTime;
+    curTime.make_now();
+
+    node* cur = head;
+    while(cur != NULL){ //update numwait
+        if(curTime < (cur -> data()).get_due()){
+            numwait++;
+        }
+        cur = cur -> link();
+    }
+    return numwait;
 }
 
 //5. See the amount of time you have to complete the assignment that is due soonest. (This 
@@ -153,19 +163,41 @@ unsigned int Planner::average_wait(){
 
 //7. Identify the assignment that has been in the list the longest.
 unsigned int Planner::oldest(){
-    //TODO
-    return 0;
+    node* cur = head;
+    unsigned int oldest = 0;
+    while(cur != NULL){ //update numwait
+        if(cur -> data().minutes_waiting() > oldest){
+            oldest = (cur -> data()).minutes_waiting();
+        }
+        cur = cur -> link();
+    }
+    return oldest;
 }
 
 //8. Identify the assignment that was added to the list most recently.
 unsigned int Planner::newest(){
-    //TODO
-    return 0;
+    node* cur = head;
+    unsigned int newest = UINT_MAX;
+    while(cur != NULL){ //update numwait
+        if(cur -> data().minutes_waiting() < newest){
+            newest = (cur -> data()).minutes_waiting();
+        }
+        cur = cur -> link();
+    }
+    return newest;
 }
 
 //9. See all assignments that must be completed by a date entered by the user
 void Planner::find_all(DateTime due_date){
-    //TODO
+
+    node* cur = head;
+    while(cur != NULL){ //update numwait
+        if((cur -> data()).get_due() < due_date){
+            cout << cur -> data();
+        }
+        cur = cur -> link();
+    }
+    return;
 }
 
 //Load Assignments into Planner Object
