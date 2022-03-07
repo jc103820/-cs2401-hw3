@@ -10,13 +10,13 @@ class Planner{
         int get_numnodes()const {return numnodes;}
 
         //Deconstructor
-        //TODO
+        ~Planner();
 
         //Copy Constructor
-        //TODO
+        Planner(const Planner& other);
 
         //Overloaded Assignment Operator
-        //TODO
+        Planner& operator =(const Planner& other);
 
         //1. Add a new Assignment to the list. (It will be inserted in order.)
         void add(Assignment a);
@@ -64,4 +64,4 @@ class Planner{
         int numnodes;
 };
 //TODO What needs to be const??
-//OFSTREAM??
+//OFSTREAM

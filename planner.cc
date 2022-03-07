@@ -9,13 +9,69 @@ Planner::Planner(node* h, node * t, int n){
 }
 
 //Deconstructor
-//TODO
+Planner::~Planner(){
+    node* ptr;
+    while(head != NULL){
+        ptr = head;
+        head = head -> link();
+        delete ptr;
+    }
+    tail = NULL;
+}
 
 //Copy Constructor
-//TODO
+Planner::Planner(const Planner& other){
+    if(other.head == NULL){
+        head = tail = NULL;
+        numnodes = 0;
+    } else {
+        node* src;
+        numnodes = other.get_numnodes();
+        head = new node(other.head -> data());
+        tail = head;
+        src = other.head -> link();
+        while(src != NULL){
+            tail -> set_link(new node(src -> data()));
+            src = src -> link();
+            tail = tail -> link();
+        }
+    }
+}
+
 
 //Overloaded Assignment Operator
-//TODO
+Planner& Planner::operator =(const Planner& other){
+    if(this == &other){
+        return *this;
+    }
+    //deconstructor
+    node* remptr;
+    while(head != NULL){
+        remptr = head;
+        head = head -> link();
+        delete remptr;
+    }
+    head = tail = NULL;
+
+    //Copy
+    if(other.head == NULL){
+        head = tail = NULL;
+        numnodes = 0;
+    } else {
+        node* src;
+        numnodes = other.get_numnodes();
+        head = new node(other.head -> data());
+        tail = head;
+        src = other.head -> link();
+        while(src != NULL){
+            tail -> set_link(new node(src -> data()));
+            src = src -> link();
+            tail = tail -> link();
+        }
+    }
+    
+    return *this;
+}
 
 //1. Add a new Assignment to the list. (It will be inserted in order.)
 void Planner::add(Assignment a){
@@ -148,15 +204,3 @@ Assignment Planner::find(string target){
         return Assignment();
     }
 }
-
-/*
-void Playlist::load(std::istream& ins){
-    while(!ins.eof()){
-        if(used == capacity){
-            resize();
-        }
-        ins >> data[used];
-        used++;
-    }
-}
-*/
