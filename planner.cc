@@ -150,15 +150,27 @@ int Planner::waiting(){
 //5. See the amount of time you have to complete the assignment that is due soonest. (This 
 //assignment should be at the front of the list.)
 unsigned int Planner::due_next(){
-    //TODO
-    return 0;
+    node* cur = head;
+    unsigned int soonest = UINT_MAX;
+    while(cur != NULL){ //update numwait
+        if(cur -> data().minutes_til_due() < soonest){
+            soonest = (cur -> data()).minutes_til_due();
+        }
+        cur = cur -> link();
+    }
+    return soonest;
 }
 
 //6. See the average amount of time that assignments have been sitting in the list since they 
 //were entered.
 unsigned int Planner::average_wait(){
-    //TODO
-    return 0;
+    node* cur = head;
+    unsigned int total = 0;
+    while(cur != NULL){ //update numwait
+        total += (cur -> data()).minutes_waiting();
+        cur = cur -> link();
+    }
+    return (total / numnodes);
 }
 
 //7. Identify the assignment that has been in the list the longest.
@@ -222,7 +234,6 @@ void Planner::save(ostream& outs){
 
 //Find Homework Assignment
 Assignment Planner::find(string target){
-    //TODO
     if(head == NULL){
         return Assignment();
     }
