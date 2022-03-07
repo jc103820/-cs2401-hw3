@@ -2,7 +2,7 @@
 using namespace std;
 
 //Constructor
-Planner::Planner(node* h, node * t, int n){
+Planner::Planner(node* h, node * t, const int n){
     head = h;
     tail = t;
     numnodes = n;
@@ -73,7 +73,7 @@ Planner& Planner::operator =(const Planner& other){
 }
 
 //1. Add a new Assignment to the list. (It will be inserted in order.)
-void Planner::add(Assignment a){
+void Planner::add(const Assignment a){
     if(head == NULL){ //if head is null them it is empty so one spot to add
         head = tail = new node(a);
         numnodes++;
@@ -99,7 +99,7 @@ void Planner::add(Assignment a){
 }
 
 //2. View the entire list of Assignment, in the order they are stored.
-void Planner::display(ostream& outs){
+void Planner::display(ostream& outs)const{
     node* cur = head;
     while(cur != NULL){
         outs << cur -> data() << endl;
@@ -109,7 +109,7 @@ void Planner::display(ostream& outs){
 
 //3. Remove an assignment that has been completed. This will use the find and remove 
 //functions, both of which will take a string which is the name of the assignment.
-void Planner::remove(string target){
+void Planner::remove(const string target){
     if(head == NULL){ //return if empty string
         return;
     }
@@ -131,7 +131,7 @@ void Planner::remove(string target){
 }
 
 //4. Learn the number of assignments that are waiting to be completed.
-int Planner::waiting(){
+int Planner::waiting()const{
     int numwait = 0;
 
     DateTime curTime;
@@ -149,7 +149,7 @@ int Planner::waiting(){
 
 //5. See the amount of time you have to complete the assignment that is due soonest. (This 
 //assignment should be at the front of the list.)
-unsigned int Planner::due_next(){
+unsigned int Planner::due_next()const{
     node* cur = head;
     unsigned int soonest = UINT_MAX;
     while(cur != NULL){ //update numwait
@@ -163,7 +163,7 @@ unsigned int Planner::due_next(){
 
 //6. See the average amount of time that assignments have been sitting in the list since they 
 //were entered.
-unsigned int Planner::average_wait(){
+unsigned int Planner::average_wait()const{
     node* cur = head;
     unsigned int total = 0;
     while(cur != NULL){ //update numwait
@@ -174,7 +174,7 @@ unsigned int Planner::average_wait(){
 }
 
 //7. Identify the assignment that has been in the list the longest.
-unsigned int Planner::oldest(){
+unsigned int Planner::oldest()const{
     node* cur = head;
     unsigned int oldest = 0;
     while(cur != NULL){ //update numwait
@@ -187,7 +187,7 @@ unsigned int Planner::oldest(){
 }
 
 //8. Identify the assignment that was added to the list most recently.
-unsigned int Planner::newest(){
+unsigned int Planner::newest()const{
     node* cur = head;
     unsigned int newest = UINT_MAX;
     while(cur != NULL){ //update numwait
@@ -200,7 +200,7 @@ unsigned int Planner::newest(){
 }
 
 //9. See all assignments that must be completed by a date entered by the user
-void Planner::find_all(DateTime due_date){
+void Planner::find_all(DateTime due_date)const{
 
     node* cur = head;
     while(cur != NULL){ //update numwait
@@ -233,7 +233,7 @@ void Planner::save(ostream& outs){
 }
 
 //Find Homework Assignment
-Assignment Planner::find(string target){
+Assignment Planner::find(string target)const{
     if(head == NULL){
         return Assignment();
     }
