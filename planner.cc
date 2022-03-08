@@ -132,6 +132,11 @@ void Planner::remove(const string target){
 
 //4. Learn the number of assignments that are waiting to be completed.
 int Planner::waiting()const{
+    //If all items in the list, even past due ones, are to be returned then just this line is needed. 
+    //I think this makes more sense.
+    return numnodes;
+    //If just assignments that are able to be turned in should be included use this. Use this: //REM
+    /*
     int numwait = 0;
 
     DateTime curTime;
@@ -145,19 +150,22 @@ int Planner::waiting()const{
         cur = cur -> link();
     }
     return numwait;
+    */
 }
 
 //5. See the amount of time you have to complete the assignment that is due soonest. (This 
 //assignment should be at the front of the list.)
 unsigned int Planner::due_next()const{
-    node* cur = head;
-    unsigned int soonest = UINT_MAX;
-    while(cur != NULL){ //update numwait
-        if(cur -> data().minutes_til_due() < soonest){
-            soonest = (cur -> data()).minutes_til_due();
+    DateTime now;
+    now.make_now();
+    unsigned int soonest = 0;
+    int tmp;
+    if(head != NULL){ //If the list is not empty
+        tmp = (head -> data().get_due().minutes_since_1970()) - now.minutes_since_1970();
+        if(tmp > 0){ //If the item is not past due
+            soonest = (head -> data()).minutes_til_due();
         }
-        cur = cur -> link();
-    }
+    } //otherwise It is either past due or doesn't exist, thus 0
     return soonest;
 }
 
@@ -170,7 +178,11 @@ unsigned int Planner::average_wait()const{
         total += (cur -> data()).minutes_waiting();
         cur = cur -> link();
     }
-    return (total / numnodes);
+    if(numnodes > 0){
+        return (total / numnodes);
+    } else { //empty list
+        return 0;
+    }
 }
 
 //7. Identify the assignment that has been in the list the longest.
@@ -189,7 +201,10 @@ unsigned int Planner::oldest()const{
 //8. Identify the assignment that was added to the list most recently.
 unsigned int Planner::newest()const{
     node* cur = head;
-    unsigned int newest = UINT_MAX;
+    unsigned int newest = 0;
+    if(cur != NULL){
+        newest = cur -> data().minutes_waiting();
+    }
     while(cur != NULL){ //update numwait
         if(cur -> data().minutes_waiting() < newest){
             newest = (cur -> data()).minutes_waiting();
